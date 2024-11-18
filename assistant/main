@@ -1,0 +1,31 @@
+from api.dictionary_api import get_definition
+from api.translation_api import translate_text
+from api.weather_api import get_weather
+from api.wikipedia_api import get_wikipedia_summary
+
+def main():
+    print("Welcome to the Education Assistant!")
+    while True:
+        query = input("\nWhat would you like to do? (define, translate, weather, wikipedia, exit): ")
+        if query == "exit":
+            print("Goodbye!")
+            break
+        elif query.startswith("define"):
+            word = query.replace("define ", "")
+            definitions = get_definition(word)
+            print("\n".join(definitions))
+        elif query.startswith("translate"):
+            text = input("Text to translate: ")
+            dest_lang = input("Translate to (e.g., 'lv'): ")
+            print(translate_text(text, dest_lang=dest_lang))
+        elif query.startswith("weather"):
+            city = input("Enter city name: ")
+            print(get_weather(city))
+        elif query.startswith("wikipedia"):
+            topic = input("Enter topic: ")
+            print(get_wikipedia_summary(topic))
+        else:
+            print("Invalid option. Try again.")
+
+if __name__ == "__main__":
+    main()
