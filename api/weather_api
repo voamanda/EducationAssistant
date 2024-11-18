@@ -1,0 +1,27 @@
+import requests
+
+def get_weather(city):
+    """
+    Fetch weather information for a city using wttr.in.
+    This API doesn't require an API key.
+    
+    Args:
+        city (str): Name of the city (e.g., "Riga").
+
+    Returns:
+        str: Weather description and temperature, or an error message.
+    """
+    try:
+        # API endpoint with city and output format
+        response = requests.get(f"https://wttr.in/{city}?format=%C+%t")
+        if response.status_code == 200:
+            return f"Weather in {city}: {response.text.strip()}"
+        else:
+            return f"Could not fetch weather for {city} (Error: {response.status_code})."
+    except Exception as e:
+        return f"An error occurred: {str(e)}"
+
+# Example usage
+if __name__ == "__main__":
+    print(get_weather("Riga"))
+    print(get_weather("Liepāja"))
