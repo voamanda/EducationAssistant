@@ -1,0 +1,10 @@
+from googletrans import Translator
+
+def translate_text(text, src_lang='en', dest_lang='lv'):
+    translator = Translator()
+    result = translator.translate(text, src=src_lang, dest=dest_lang)
+    return result.text
+
+# Example usage
+if __name__ == "__main__":
+    print(translate_text("How are you?", dest_lang="lv"))
