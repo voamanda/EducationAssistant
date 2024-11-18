@@ -1,6 +1,5 @@
 # EducationAssistant
 A learning companion for students or language learners.
-# Education Assistant
 
 ## Overview
 The Education Assistant is a virtual companion for students and language learners. It provides word definitions, translations, weather updates, and research summaries.
