@@ -1,0 +1,81 @@
+import os
+from gtts import gTTS
+import playsound
+
+def text_to_speech(text, language='en', filename="response.mp3"):
+    """
+    Converts text to speech and plays the audio.
+
+    Args:
+        text (str): Text to be converted into speech.
+        language (str): Language code for the speech (default: 'en').
+        filename (str): Filename to save the audio file (default: "response.mp3").
+    """
+    try:
+        tts = gTTS(text=text, lang=language)
+        tts.save(filename)
+        playsound.playsound(filename)
+        os.remove(filename)  # Cleanup after playback
+    except Exception as e:
+        print(f"An error occurred during text-to-speech conversion: {e}")
+
+
+def format_query(query):
+    """
+    Cleans and formats user input query for better processing.
+
+    Args:
+        query (str): The raw input query.
+
+    Returns:
+        str: A cleaned and lowercase version of the query.
+    """
+    return query.strip().lower()
+
+
+def validate_input(user_input, valid_options):
+    """
+    Validates user input against a list of valid options.
+
+    Args:
+        user_input (str): The user's input to validate.
+        valid_options (list): A list of valid strings.
+
+    Returns:
+        bool: True if valid, False otherwise.
+    """
+    return user_input in valid_options
+
+
+def summarize_response(response, max_length=300):
+    """
+    Summarizes a long text response to fit a defined length.
+
+    Args:
+        response (str): The full response text.
+        max_length (int): The maximum length of the summarized response.
+
+    Returns:
+        str: A truncated version of the response if it exceeds max_length.
+    """
+    if len(response) > max_length:
+        return response[:max_length] + "..."
+    return response
+
+
+# Example usage
+if __name__ == "__main__":
+    # Text-to-speech example
+    text_to_speech("Hello! How can I assist you today?")
+
+    # Format query example
+    raw_query = "   Define EDUCATION   "
+    print(format_query(raw_query))  # Output: "define education"
+
+    # Validate input example
+    options = ["define", "translate", "weather", "wikipedia", "exit"]
+    print(validate_input("translate", options))  # Output: True
+
+    # Summarize response example
+    long_text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+    print(summarize_response(long_text, max_length=50))
