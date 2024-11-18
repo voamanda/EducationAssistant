@@ -1,0 +1,74 @@
+import tkinter as tk
+from tkinter import messagebox
+from api.dictionary_api import get_definition
+from api.translation_api import translate_text
+from api.weather_api import get_weather
+from api.wikipedia_api import get_wikipedia_summary
+
+def define_word():
+    word = entry.get()
+    if word:
+        definition = "\n".join(get_definition(word))
+        messagebox.showinfo("Definition", definition)
+    else:
+        messagebox.showerror("Error", "Please enter a word.")
+
+def translate_text_gui():
+    text = entry.get()
+    dest_lang = language_entry.get()
+    if text and dest_lang:
+        translation = translate_text(text, dest_lang=dest_lang)
+        messagebox.showinfo("Translation", translation)
+    else:
+        messagebox.showerror("Error", "Please enter text and a target language.")
+
+def get_weather_gui():
+    city = entry.get()
+    if city:
+        weather_info = get_weather(city)
+        messagebox.showinfo("Weather", weather_info)
+    else:
+        messagebox.showerror("Error", "Please enter a city name.")
+
+def wikipedia_search():
+    topic = entry.get()
+    if topic:
+        summary = get_wikipedia_summary(topic)
+        messagebox.showinfo("Wikipedia Summary", summary)
+    else:
+        messagebox.showerror("Error", "Please enter a topic.")
+
+# GUI setup
+root = tk.Tk()
+root.title("Education Assistant")
+
+frame = tk.Frame(root, padx=20, pady=20)
+frame.pack()
+
+label = tk.Label(frame, text="Enter your query:")
+label.pack()
+
+entry = tk.Entry(frame, width=50)
+entry.pack(pady=5)
+
+language_label = tk.Label(frame, text="Enter language code (for translation):")
+language_label.pack()
+language_entry = tk.Entry(frame, width=10)
+language_entry.pack(pady=5)
+
+define_button = tk.Button(frame, text="Define Word", command=define_word)
+define_button.pack(pady=5)
+
+translate_button = tk.Button(frame, text="Translate Text", command=translate_text_gui)
+translate_button.pack(pady=5)
+
+weather_button = tk.Button(frame, text="Get Weather", command=get_weather_gui)
+weather_button.pack(pady=5)
+
+wikipedia_button = tk.Button(frame, text="Search Wikipedia", command=wikipedia_search)
+wikipedia_button.pack(pady=5)
+
+exit_button = tk.Button(frame, text="Exit", command=root.quit)
+exit_button.pack(pady=5)
+
+root.mainloop()
