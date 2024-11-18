@@ -1,0 +1,37 @@
+import unittest
+import sqlite3
+from database.crud_operations import add_task, get_tasks
+
+class TestDatabase(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        # Setup an in-memory database for testing
+        cls.conn = sqlite3.connect(":memory:")
+        cursor = cls.conn.cursor()
+        cursor.execute("""
+        CREATE TABLE tasks (
+            id INTEGER PRIMARY KEY,
+            task_name TEXT NOT NULL,
+            status TEXT DEFAULT 'incomplete'
+        )
+        """)
+        cls.conn.commit()
+
+    def test_add_task(self):
+        add_task("Study for test", conn=self.conn)
+        tasks = get_tasks(conn=self.conn)
+        self.assertEqual(len(tasks), 1)
+        self.assertEqual(tasks[0][1], "Study for test")
+
+    def test_get_tasks(self):
+        add_task("Read a book", conn=self.conn)
+        tasks = get_tasks(conn=self.conn)
+        self.assertEqual(len(tasks), 2)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.conn.close()
+
+if __name__ == "__main__":
+    unittest.main()
