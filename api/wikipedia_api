@@ -1,0 +1,14 @@
+import wikipedia
+
+def get_wikipedia_summary(topic):
+    try:
+        summary = wikipedia.summary(topic, sentences=2)
+        return summary
+    except wikipedia.exceptions.DisambiguationError as e:
+        return f"Multiple results found: {e.options[:3]}"
+    except wikipedia.exceptions.PageError:
+        return "Topic not found."
+
+# Example usage
+if __name__ == "__main__":
+    print(get_wikipedia_summary("Liepāja"))
