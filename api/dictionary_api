@@ -1,0 +1,19 @@
+import requests
+
+API_URL = "https://api.dictionaryapi.dev/api/v2/entries/en/"
+
+def get_definition(word):
+    response = requests.get(API_URL + word)
+    if response.status_code == 200:
+        data = response.json()
+        definitions = [
+            meaning['definitions'][0]['definition']
+            for meaning in data[0]['meanings']
+        ]
+        return definitions
+    else:
+        return ["Definition not found."]
+
+# Example usage
+if __name__ == "__main__":
+    print(get_definition("ephemeral"))
