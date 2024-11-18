@@ -1,0 +1,26 @@
+import unittest
+from api.dictionary_api import get_definition
+from api.translation_api import translate_text
+from api.weather_api import get_weather
+from api.wikipedia_api import get_wikipedia_summary
+
+class TestAPIs(unittest.TestCase):
+
+    def test_dictionary_api(self):
+        result = get_definition("education")
+        self.assertTrue(len(result) > 0)
+
+    def test_translation_api(self):
+        result = translate_text("Hello", dest_lang="lv")
+        self.assertEqual(result.lower(), "sveiki")
+
+    def test_weather_api(self):
+        result = get_weather("Riga")
+        self.assertTrue("Weather" in result or "Error" in result)
+
+    def test_wikipedia_api(self):
+        result = get_wikipedia_summary("Liepāja")
+        self.assertTrue(len(result) > 0)
+
+if __name__ == "__main__":
+    unittest.main()
