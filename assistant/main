@@ -2,30 +2,51 @@ from api.dictionary_api import get_definition
 from api.translation_api import translate_text
 from api.weather_api import get_weather
 from api.wikipedia_api import get_wikipedia_summary
+from assistant.tools import text_to_speech, format_query, validate_input, summarize_response
 
 def main():
     print("Welcome to the Education Assistant!")
+    text_to_speech("Welcome to the Education Assistant!")
+
     while True:
-        query = input("\nWhat would you like to do? (define, translate, weather, wikipedia, exit): ")
-        if query == "exit":
-            print("Goodbye!")
-            break
-        elif query.startswith("define"):
-            word = query.replace("define ", "")
-            definitions = get_definition(word)
-            print("\n".join(definitions))
-        elif query.startswith("translate"):
-            text = input("Text to translate: ")
-            dest_lang = input("Translate to (e.g., 'lv'): ")
-            print(translate_text(text, dest_lang=dest_lang))
-        elif query.startswith("weather"):
-            city = input("Enter city name: ")
-            print(get_weather(city))
-        elif query.startswith("wikipedia"):
-            topic = input("Enter topic: ")
-            print(get_wikipedia_summary(topic))
+        print("\nOptions: define, translate, weather, wikipedia, exit")
+        query = input("What would you like to do? ").strip()
+        query = format_query(query)
+
+        if validate_input(query, ["define", "translate", "weather", "wikipedia", "exit"]):
+            if query == "exit":
+                text_to_speech("Goodbye!")
+                print("Goodbye!")
+                break
+
+            elif query == "define":
+                word = input("Enter a word to define: ").strip()
+                definition = get_definition(word)
+                response = "\n".join(definition)
+                text_to_speech(summarize_response(response))
+                print(response)
+
+            elif query == "translate":
+                text = input("Enter text to translate: ").strip()
+                dest_lang = input("Enter target language code (e.g., 'lv' for Latvian): ").strip()
+                translation = translate_text(text, dest_lang=dest_lang)
+                text_to_speech(translation)
+                print(f"Translation: {translation}")
+
+            elif query == "weather":
+                city = input("Enter a city name: ").strip()
+                weather_info = get_weather(city)
+                text_to_speech(weather_info)
+                print(weather_info)
+
+            elif query == "wikipedia":
+                topic = input("Enter a topic to search on Wikipedia: ").strip()
+                summary = get_wikipedia_summary(topic)
+                text_to_speech(summarize_response(summary))
+                print(summary)
         else:
-            print("Invalid option. Try again.")
+            text_to_speech("Invalid option. Please try again.")
+            print("Invalid option. Please try again.")
 
 if __name__ == "__main__":
     main()
